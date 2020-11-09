@@ -1,7 +1,7 @@
 require 'active_support/core_ext/hash/keys'
 require 'active_support/inflector'
 require 'crawler/base'
-require 'crawler/operator/providers/default/configuration'
+require 'crawler/operator/configuration'
 
 module Crawler
   module Operator
@@ -16,7 +16,7 @@ module Crawler
     end
 
     def self.resolve(name, address)
-      full_address = "#{address.dig(:street)}, #{address.dig(:zipcode)} #{address.dig(:city)}, #{address.dig(:country).upcase}"
+      full_address = "#{address.dig(:street)}, #{address.dig(:zipcode)} #{address.dig(:city)}, #{address.dig(:country)&.upcase}"
 
       operator = PROVIDERS.find do |provider_name|
         camelized = ActiveSupport::Inflector.camelize("crawler/operator/providers/#{provider_name.to_s}")
