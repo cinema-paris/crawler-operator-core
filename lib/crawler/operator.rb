@@ -18,7 +18,7 @@ module Crawler
     def self.resolve(name, address)
       full_address = "#{address.dig(:street)}, #{address.dig(:zipcode)} #{address.dig(:city)}, #{address.dig(:country)&.upcase}"
 
-      operator = PROVIDERS.reduce(nil) do |acc, provider_name|
+      operator = PROVIDERS.reduce(nil) do |_acc, provider_name|
         camelized = ActiveSupport::Inflector.camelize("crawler/operator/providers/#{provider_name.to_s}")
         klass = ActiveSupport::Inflector.constantize(camelized)
         result = klass.resolve(name, full_address)
@@ -27,9 +27,9 @@ module Crawler
       end
 
       return operator if operator
-      return unless default_provider
+      return unless config.default_provider
 
-      default_provider.resolve(name, full_address)
+      config.default_provider.resolve(name, full_address)
     end
   end
 end
